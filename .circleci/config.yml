@@ -4,7 +4,7 @@ jobs:
   test-cypress-slack-reporter-old:
     docker:
       # the Docker image with Cypress dependencies
-      - image: cypress/base:17.8.0
+      - image: cypress/base:20.18.0
         environment:
           ## this enables colors in the output
           TERM: xterm
@@ -23,6 +23,9 @@ jobs:
           paths:
             - ~/.npm
             - ~/.cache  
+      - run:
+          name: deps
+          command: apt-get update && apt-get install -y make
       - run:
           when: always
           name: Lint project

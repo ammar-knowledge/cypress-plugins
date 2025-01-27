@@ -21,13 +21,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [18.x, 20.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -40,14 +40,14 @@ jobs:
     - run: make test
     - run: make combine-reports && make generate-report
     - name: get artifacts 1 
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: test-output-1
+        name: test-output-1-${{matrix.node-version}}
         path: |
-          cypress/reports
-          cypress/videos
-          cypress/screenshots
-          mochareports
+          cypress-slack-reporter-old/cypress/reports
+          cypress-slack-reporter-old/cypress/videos
+          cypress-slack-reporter-old/cypress/screenshots
+          cypress-slack-reporter-old/mochareports
     - run: npm run slack-ts 
     - run: npm run slack-js 
     - run: npm run slack-ts-opts 
@@ -57,9 +57,9 @@ jobs:
     - run: npm run slack-js-opts-build-failed
     - run: npm run cli
     - name: get artifacts 2 
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: test-output-2
+        name: test-output-2-${{matrix.node-version}}
         path: |
-          src/slack/test
-          cypress/reports/mocha
+          cypress-slack-reporter-old/src/slack/test
+          cypress-slack-reporter-old/cypress/reports/mocha
